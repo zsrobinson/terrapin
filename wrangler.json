@@ -1,26 +1,10 @@
 {
-  "$schema": "./node_modules/wrangler/config-schema.json",
-  "name": "simplestudentorg",
-  "compatibility_date": "2026-07-31",
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "terrapin",
+  "compatibility_date": "2026-08-18",
   "observability": {
     "enabled": true
   },
   "main": "@tanstack/react-start/server-entry",
-  "compatibility_flags": ["nodejs_compat"],
-  "d1_databases": [
-    {
-      "binding": "db",
-      "database_name": "simplestudentorg",
-      "database_id": "ace2b80d-abcd-424e-8f7d-995cb4e83df0",
-      "migrations_dir": "drizzle",
-      "migrations_pattern": "drizzle/*/migration.sql",
-      "remote": true
-    }
-  ],
-  "send_email": [
-    {
-      "name": "EMAIL",
-      "remote": true
-    }
-  ]
+  "compatibility_flags": ["nodejs_compat"]
 }

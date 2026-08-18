@@ -1,1 +1,0 @@
-ALTER TABLE `orgs` RENAME TO `org`;

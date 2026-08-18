@@ -1,6 +1,7 @@
-import { defineRelations, defineRelationsPart } from "drizzle-orm";
-import { integer, snakeCase, text } from "drizzle-orm/sqlite-core";
+import { defineRelationsPart } from "drizzle-orm";
+import { int, integer, snakeCase, text } from "drizzle-orm/sqlite-core";
 import { uuidv7 } from "uuidv7";
+import { user } from "./auth-schema";
 
 const id = text("id")
   .primaryKey()
@@ -16,12 +17,39 @@ const timestamps = {
     .$onUpdate(() => new Date()),
 };
 
-export const org = snakeCase.table("org", {
+export const pin = snakeCase.table("pin", {
   id,
-  slug: text().notNull().unique(),
-  name: text().notNull().unique(),
-  description: text().notNull().default(""),
+  text: text().notNull().unique(),
+  userId: text().notNull(),
   ...timestamps,
 });
 
-export const appRelations = defineRelationsPart({ org });
+export const vote = snakeCase.table("vote", {
+  id,
+  value: int().notNull(),
+  pinId: text().notNull(),
+  userId: text().notNull(),
+  ...timestamps,
+});
+
+export const appRelations = defineRelationsPart({ pin, vote, user }, (r) => ({
+  pin: {
+    user: r.one.user({
+      from: r.pin.userId,
+      to: r.user.id,
+      optional: false,
+    }),
+  },
+  vote: {
+    pin: r.one.pin({
+      from: r.vote.pinId,
+      to: r.pin.id,
+      optional: false,
+    }),
+    user: r.one.user({
+      from: r.vote.userId,
+      to: r.user.id,
+      optional: false,
+    }),
+  },
+}));
